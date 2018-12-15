@@ -5,7 +5,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 // for printing out logs
 const morgan = require('morgan');
-
+// init models
+const { sequelize } = require('./models');
+// grab config file
+const config = require('./config/config');
 // building express server
 const app = express();
 
@@ -14,12 +17,10 @@ app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(cors());
 
+require('./routes')(app);
 
-app.listen(process.env.PORT || 8081);
-
-
-app.post('/register', (req, res) => {
-  res.send({
-    message: 'Your user was registered!!',
+sequelize.sync()
+  .then(() => {
+    app.listen(config.port);
+    console.log(`Server started on port ${config.port}!`);
   });
-});
