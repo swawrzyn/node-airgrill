@@ -6,7 +6,7 @@
           <v-toolbar-title>Register</v-toolbar-title>
         </v-toolbar>
         <div class="pl-4 pr-4 pt-4 pb-4">
-           <v-form v-model="valid">
+           <v-form>
             <v-text-field
               v-model="email"
               label="Email"
@@ -15,6 +15,9 @@
             <v-text-field
               v-model="password"
               label="Password"
+              :append-icon="show ? 'visibility_off' : 'visibility'"
+              :type="show ? 'text' : 'password'"
+              @click:append="show = !show"
               required
             ></v-text-field>
           </v-form>
@@ -35,15 +38,18 @@ export default {
       email: '',
       password: '',
       error: null,
+      show: false,
     };
   },
   methods: {
     async register() {
       try {
-        await AuthenticationService.register({
+        const response = await AuthenticationService.register({
           email: this.email,
           password: this.password,
         });
+        this.$store.dispatch('setToken', response.data.token);
+        this.$store.dispatch('setUser', response.data.user);
       } catch (err) {
         this.error = err.response.data.error;
       }

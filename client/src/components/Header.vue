@@ -7,7 +7,7 @@
       <v-btn flat dark>Browse</v-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
-     <v-toolbar-items class="hidden-sm-and-down">
+     <v-toolbar-items v-if="!$store.state.isUserLoggedIn" class="hidden-sm-and-down">
       <v-btn flat dark router to="login">Log in</v-btn>
       <v-btn flat dark router to="register">Sign up</v-btn>
     </v-toolbar-items>
