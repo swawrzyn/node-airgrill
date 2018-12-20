@@ -21,4 +21,28 @@ module.exports = {
       });
     }
   },
+  async show(req, res) {
+    try {
+      const grill = await Grill.findById(req.params.grillId);
+      return res.send(grill);
+    } catch (err) {
+      return res.status(500).send({
+        error: 'an error has occured trying to fetch the grill',
+      });
+    }
+  },
+  async put(req, res) {
+    try {
+      await Grill.update(req.body, {
+        where: {
+          id: req.params.grillId,
+        },
+      });
+      return res.send(req.body);
+    } catch (err) {
+      return res.status(500).send({
+        error: 'an error has occured trying to update the grill',
+      });
+    }
+  },
 };

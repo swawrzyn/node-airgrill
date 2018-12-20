@@ -4,12 +4,12 @@
       <v-toolbar-title>AirGrill</v-toolbar-title>
     </router-link>
     <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn flat dark router to="grills">Browse</v-btn>
+      <v-btn flat dark router to="/grills">Browse</v-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
      <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn v-if="!$store.state.isUserLoggedIn" flat dark router to="login">Log in</v-btn>
-      <v-btn v-if="!$store.state.isUserLoggedIn" flat dark router to="register">Sign up</v-btn>
+      <v-btn v-if="!$store.state.isUserLoggedIn" flat dark router to="/login">Log in</v-btn>
+      <v-btn v-if="!$store.state.isUserLoggedIn" flat dark router to="/register">Sign up</v-btn>
       <v-btn
       v-if="$store.state.isUserLoggedIn"
       flat

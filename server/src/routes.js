@@ -12,4 +12,8 @@ module.exports = (app) => {
     GrillsController.index);
   app.post('/grills',
     GrillsController.create);
+  app.get('/grills/:grillId',
+    GrillsController.show);
+  app.put('/grills/:grillId',
+    GrillsController.put);
 };
