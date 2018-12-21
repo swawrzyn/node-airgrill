@@ -1,11 +1,8 @@
 <template>
   <v-toolbar fixed dark class="cyan">
-    <router-link class="toolbar-title" to="/">
+    <router-link class="toolbar-title" :to="{ name: 'grills' }">
       <v-toolbar-title>AirGrill</v-toolbar-title>
     </router-link>
-    <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn flat dark router to="/grills">Browse</v-btn>
-    </v-toolbar-items>
     <v-spacer></v-spacer>
      <v-toolbar-items class="hidden-sm-and-down">
       <v-btn v-if="!$store.state.isUserLoggedIn" flat dark router to="/login">Log in</v-btn>

@@ -1,9 +1,23 @@
+const { Op } = require('sequelize');
 const { Grill } = require('../models');
 
 module.exports = {
   async index(req, res) {
     try {
-      const grills = await Grill.findAll({ limit: 10 });
+      let grills = null;
+      if (req.query.search) {
+        grills = await Grill.findAll({
+          where: {
+            [Op.or]: [
+              'name', 'description', 'location',
+            ].map(key => ({
+              [key]: { [Op.like]: `%${req.query.search}%` },
+            })),
+          },
+        });
+      } else {
+        grills = await Grill.findAll({ limit: 10 });
+      }
       return res.send(grills);
     } catch (err) {
       return res.status(500).send({

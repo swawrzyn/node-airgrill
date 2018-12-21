@@ -6,12 +6,15 @@ import { sync } from 'vuex-router-sync';
 import 'vuetify/dist/vuetify.min.css';
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import store from '@/store/store';
+import Panel from '@/components/globals/Panel';
 import App from './App';
 import router from './router';
 
 Vue.config.productionTip = false;
 
 Vue.use(Vuetify);
+
+Vue.component('panel', Panel);
 
 sync(store, router);
 

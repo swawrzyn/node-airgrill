@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import Panel from '@/components/Panel';
 import GrillsService from '@/services/GrillsService';
 
 export default {
@@ -89,7 +88,6 @@ export default {
     },
   },
   components: {
-    Panel,
   },
 };
 </script>

@@ -23,6 +23,20 @@
           :to="{ name: 'grill-edit', params: { grillId: grill.id } }">
           Edit
         </v-btn>
+        <v-btn
+          v-if="isUserLoggedIn && this.bookMark"
+          dark
+          class="cyan"
+          @click="unBookmark">
+          Unbookmark
+        </v-btn>
+        <v-btn
+          v-if="isUserLoggedIn && !this.bookMark"
+          dark
+          class="cyan"
+          @click="bookmark">
+          Bookmark
+        </v-btn>
       </panel>
     </v-flex>
   </v-layout>
@@ -30,20 +44,53 @@
 
 <script>
 import GrillsService from '@/services/GrillsService';
-import Panel from '@/components/Panel';
+import BookmarksService from '@/services/BookmarksService';
+import { mapState } from 'vuex';
 
 export default {
   data() {
     return {
       grill: null,
+      bookMark: null,
     };
   },
+  computed: {
+    ...mapState([
+      'isUserLoggedIn',
+    ]),
+  },
   async mounted() {
-    const songId = this.$store.state.route.params.grillId;
-    this.grill = (await GrillsService.show(songId)).data;
+    const grillId = this.$store.state.route.params.grillId;
+    const bm = (await BookmarksService.index({
+      grillId,
+      userId: this.$store.state.user.id,
+    })).data;
+    this.bookMark = bm;
+    this.grill = (await GrillsService.show(grillId)).data;
   },
   components: {
-    Panel,
+  },
+  methods: {
+    async bookmark() {
+      const grillId = this.$store.state.route.params.grillId;
+      try {
+        this.bookMark = (await BookmarksService.post({
+          GrillId: grillId,
+          UserId: this.$store.state.user.id,
+        })).data;
+      } catch (_) {
+        // todo
+      }
+    },
+    async unBookmark() {
+      const grillId = this.$store.state.route.params.grillId;
+      try {
+        await BookmarksService.delete(this.bookMark.id);
+        this.bookMark = null;
+      } catch (_) {
+        // todo
+      }
+    },
   },
 };
 </script>

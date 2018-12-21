@@ -18,6 +18,14 @@
             ></v-text-field>
           </v-form>
         <br>
+          <v-alert
+            class="ml-4"
+            :value="error"
+            transition="scale-transition"
+            error>
+            {{error}}
+          </v-alert>
+        <br>
         <v-btn class="cyan" dark @click="register">Register</v-btn>
       </panel>
     </v-flex>
@@ -26,7 +34,6 @@
 
 <script>
 import AuthenticationService from '@/services/AuthenticationService';
-import Panel from '@/components/Panel';
 
 export default {
   data() {
@@ -38,7 +45,6 @@ export default {
     };
   },
   components: {
-    Panel,
   },
   methods: {
     async register() {
@@ -61,7 +67,4 @@ export default {
 </script>
 
 <style scoped>
-.error {
-  color: red;
-}
 </style>
