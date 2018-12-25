@@ -24,17 +24,17 @@
           Edit
         </v-btn>
         <v-btn
-          v-if="isUserLoggedIn && this.bookMark"
+          v-if="isUserLoggedIn && this.bookmark"
           dark
           class="cyan"
           @click="unBookmark">
           Unbookmark
         </v-btn>
         <v-btn
-          v-if="isUserLoggedIn && !this.bookMark"
+          v-if="isUserLoggedIn && !this.bookmark"
           dark
           class="cyan"
-          @click="bookmark">
+          @click="setAsBookmark">
           Bookmark
         </v-btn>
       </panel>
@@ -45,48 +45,60 @@
 <script>
 import GrillsService from '@/services/GrillsService';
 import BookmarksService from '@/services/BookmarksService';
+import GrillHistoryService from '@/services/GrillHistoryService';
 import { mapState } from 'vuex';
 
 export default {
   data() {
     return {
       grill: null,
-      bookMark: null,
+      bookmark: null,
     };
   },
   computed: {
     ...mapState([
       'isUserLoggedIn',
+      'user',
     ]),
   },
   async mounted() {
     const grillId = this.$store.state.route.params.grillId;
     const bm = (await BookmarksService.index({
       grillId,
-      userId: this.$store.state.user.id,
+      userId: this.user.id,
     })).data;
-    this.bookMark = bm;
+    if (bm.length) {
+      this.bookmark = bm[0];
+    }
     this.grill = (await GrillsService.show(grillId)).data;
+
+    if (this.isUserLoggedIn) {
+      GrillHistoryService.post({
+        GrillId: this.grill.id,
+        UserId: this.user.id,
+      });
+    }
   },
   components: {
   },
   methods: {
-    async bookmark() {
+    async setAsBookmark() {
       const grillId = this.$store.state.route.params.grillId;
       try {
-        this.bookMark = (await BookmarksService.post({
+        const bookmark = (await BookmarksService.post({
           GrillId: grillId,
-          UserId: this.$store.state.user.id,
+          UserId: this.user.id,
         })).data;
+        bookmark.bookmarkId = bookmark.id;
+        this.bookmark = bookmark;
       } catch (_) {
         // todo
       }
     },
     async unBookmark() {
-      const grillId = this.$store.state.route.params.grillId;
       try {
-        await BookmarksService.delete(this.bookMark.id);
-        this.bookMark = null;
+        await BookmarksService.delete(this.bookmark.bookmarkId);
+        this.bookmark = null;
       } catch (_) {
         // todo
       }

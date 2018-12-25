@@ -1,6 +1,10 @@
 <template>
   <v-layout>
-    <v-flex xs6 offset-xs3 dp-3>
+    <v-flex xs6 mr-2>
+      <grills-bookmarks />
+      <recently-viewed-grills class="mt-2" />
+    </v-flex>
+    <v-flex xs6 dp-3>
       <grills-search-panel />
       <grills-panel :grills="grills" class="mt-2"/>
     </v-flex>
@@ -11,11 +15,15 @@
 import GrillsService from '@/services/GrillsService';
 import GrillsPanel from './GrillsPanel';
 import GrillsSearchPanel from './GrillsSearchPanel';
+import GrillsBookmarks from './GrillsBookmarks';
+import RecentlyViewedGrills from './RecentlyViewedGrills';
 
 export default {
   components: {
     GrillsPanel,
     GrillsSearchPanel,
+    GrillsBookmarks,
+    RecentlyViewedGrills,
   },
   data() {
     return {
